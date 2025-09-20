@@ -1,0 +1,46 @@
+# Python bytecode
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Flask instance folder
+instance/
+
+# Flask config file
+*.env
+
+# VSCode settings
+.vscode/
+
+# PyCharm settings
+.idea/
+
+# Virtual Environment
+venv/
+env/
+ENV/
+.venv/
+*.env
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+
+# Pycharm folder
+.idea/
+
+# macOS specific
+.DS_Store
+
+# Windows specific
+Thumbs.db
+
+# Logs
+*.log
+
+# Coverage directory from tools like coverage.py
+.coverage
+.coverage.*
+*.hypothesis/
+*.tox/
+.nox/

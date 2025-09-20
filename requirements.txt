@@ -1,0 +1,7 @@
+Flask
+Flask-Migrate
+apache-airflow
+requests
+pandas
+sqlalchemy
+pymysql
