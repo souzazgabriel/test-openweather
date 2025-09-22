@@ -3,9 +3,7 @@ import sys, os
 # Adiciona o caminho absoluto da pasta 'scripts' ao PYTHONPATH
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from airflow import DAG
 from airflow.decorators import dag, task
-from airflow.providers.standard.operators.python import PythonOperator
 from datetime import datetime
 from scripts.extract import fetch_weather_data
 from scripts.process import process_weather_data
