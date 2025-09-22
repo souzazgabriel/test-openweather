@@ -57,7 +57,7 @@ Crie o arquivo `scripts/config.py` na pasta `scripts` com as configurações do 
 class Config:
     SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://airflow:airflow@mysql:3306/weather_db')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    API_KEY = os.getenv('OPENWEATHER_API_KEY', 'sua_chave_api_openweathermap')
+    API_KEY = 'sua_chave_api_openweathermap'
     BASE_URL = 'https://api.openweathermap.org/data/2.5/weather'
 ```
 
