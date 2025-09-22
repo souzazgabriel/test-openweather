@@ -51,7 +51,7 @@ pip install -r requirements.txt
 
 ### 4. Criar o Arquivo de Configuração
 
-Crie o arquivo `scripts/config.py` na pasta `scripts` com as configurações do banco de dados e da API OpenWeatherMap. Use placeholders para dados sensíveis e carregue-os de variáveis de ambiente no código real, se possível:
+Crie o arquivo `scripts/config.py` na pasta `scripts` com as configurações do banco de dados e da API OpenWeatherMap:
 
 ```python
 class Config:
