@@ -22,7 +22,9 @@ def process_weather_data(raw_data):
     wind_info = raw_data["wind"]  # Informações sobre o vento
 
     return {
-        "temperature": main_info["temp"],  # Temperatura em Celsius
+        'name': raw_data['name'], # Nome da cidade
+        'id': raw_data['id'], # ID da cidade
+        "temperature": main_info['temp'],  # Temperatura em Celsius
         "humidity": main_info["humidity"],  # Umidade
         "timestamp": datetime.fromtimestamp(raw_data["dt"]),  # Timestamp convertido para datetime
         "windspeed": wind_info["speed"],  # Velocidade do vento
@@ -36,10 +38,11 @@ def process_weather_data(raw_data):
 def load_weather_data(city_name, processed_data):
     """Carrega os dados no banco, incluindo novos campos.""" 
     # Verifica se a cidade já existe
-    city = City.query.filter_by(name=city_name).first()
+    city = City.query.get(processed_data['id'])
     if not city:
         city = City(
-            name=city_name,
+            id=processed_data['id'],
+            name=processed_data['name'],
             country=processed_data["country"],
             latitude=processed_data["latitude"],
             longitude=processed_data["longitude"]

@@ -1,10 +1,9 @@
-
 CREATE DATABASE weather_db;
 
 USE weather_db;
 
  CREATE TABLE  IF NOT EXISTS  `cities` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL,
   `name` varchar(100) NOT NULL,
   `country` varchar(100) NOT NULL,
   `latitude` float NOT NULL,

@@ -1,14 +1,22 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, Response
 from flask_migrate import Migrate
 from models import db, City, WeatherData,DailySummary
 from etl import fetch_weather_data, process_weather_data, load_weather_data,generate_daily_summary
 from scripts.config import Config
+import json
 
 # Criação do app e configuração
 app = Flask(__name__)
 app.config.from_object(Config)
 db.init_app(app)
 migrate = Migrate(app, db)
+
+def json_response(data, status=200):
+    return Response(
+        json.dumps(data, ensure_ascii=False), # Para manter acentos
+        mimetype='application/json; charset=utf-8',
+        status=status
+    )
 
 @app.route('/etl', methods=['GET'])
 def run_etl():
@@ -30,7 +38,7 @@ def run_etl():
         except Exception as e:
             results.append({"city": city_name, "status": "error", "message": str(e)})
 
-    return jsonify(results)
+    return json_response(results)
 
 
 @app.route('/cities', methods=['GET'])
@@ -39,7 +47,8 @@ def get_cities():
     Endpoint para listar todas as cidades cadastradas no banco.
     """
     cities = City.query.all()
-    return jsonify([{"id": city.id, "name": city.name} for city in cities])
+    data = [{"id": city.id, "name": city.name} for city in cities]
+    return json_response(data)
 
 @app.route('/weather/hot-cities', methods=['GET'])
 def get_hot_cities():
@@ -55,14 +64,14 @@ def get_hot_cities():
             .all()
         )
         if not hot_weather_data:
-            return jsonify({"message": "Nenhuma cidade encontrada com temperatura acima de 25°C."}), 404
+            return json_response({"message": "Nenhuma cidade encontrada com temperatura acima de 25°C."}, 404)
 
         # Formata a resposta como uma lista de dicionários
         result = [{"city": city, "temperature": temp} for city, temp in hot_weather_data]
-        return jsonify(result), 200
+        return json_response(result, status=200)
 
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        return json_response({"error": str(e)}, 500)
 
 @app.route('/weather/avg-temperature', methods=['GET'])
 def get_avg_temperature():
@@ -79,14 +88,14 @@ def get_avg_temperature():
         )
         
         if not avg_temp_data:
-            return jsonify({"message": "Nenhum dado de temperatura encontrado."}), 404
+            return json_response({"message": "Nenhum dado de temperatura encontrado."}, 404)
 
         # Formata a resposta como uma lista de dicionários
         result = [{"city": city, "avg_temperature": round(avg_temp, 2)} for city, avg_temp in avg_temp_data]
-        return jsonify(result), 200
+        return json_response(result, status=200)
 
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        return json_response({"error": str(e)}, 500)
 
 
 @app.route('/daily_summary', methods=['GET'])
@@ -95,13 +104,14 @@ def get_daily_summary():
     Endpoint para listar os resumos diários por cidade.
     """
     summaries = DailySummary.query.all()
-    return jsonify([{
+    data = [{
         "city_name": summary.city.name,
         "date": summary.date.strftime("%Y-%m-%d"),
         "avg_temperature": summary.avg_temperature,
         "avg_humidity": summary.avg_humidity,
         "record_count": summary.record_count
-    } for summary in summaries])
+    } for summary in summaries]
+    return json_response(data)
 
 
 
@@ -112,7 +122,7 @@ def get_weather():
     incluindo os novos campos.
     """
     weather_data = WeatherData.query.all()
-    return jsonify([{
+    result = [{
         "city": data.city.name,  # Nome da cidade (relacionamento com City)
         "country": data.city.country,  # País
         "latitude": data.city.latitude,  # Latitude
@@ -123,12 +133,13 @@ def get_weather():
         "windspeed": data.windspeed,  # Velocidade do vento
         "weather_condition": data.weather_condition,  # Condição climática
         "precipitation": data.precipitation  # Precipitação
-    } for data in weather_data])
+    } for data in weather_data]
+    return json_response(result)
 
 @app.route('/generate_summary', methods=['GET'])
 def generate_summary():
     generate_daily_summary()
-    return {"message": "Resumo diário gerado com sucesso!"}, 200
+    return json_response({"message": "Resumo diário gerado com sucesso!"}, 200)
 
 
 if __name__ == '__main__':

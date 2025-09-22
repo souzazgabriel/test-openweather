@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 
 # Weather ETL API
 
@@ -268,6 +267,3 @@ Siga os tutoriais abaixo para configurar o WSL2:
 - **Requests:** Consumo de API REST.
 - **SQLAlchemy:** ORM para interação com o banco de dados.
 - **Flask-Migrate:** Gerenciamento de migra
-=======
-# test-openweather
->>>>>>> 399fb280e117e58c881395f12ee266d9f5ec627c
