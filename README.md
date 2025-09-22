@@ -63,13 +63,19 @@ Isso irá subir os serviços definidos no `docker-compose.yaml`, incluindo:
 - MySQL
 - Airflow (ou aplicação Flask/ETL, se incluída no Compose)
 
-4. Verifique se os contêineres estão rodando:
+4. Inicie o aplicativo Flask:
+
+```bash
+py app.py
+```
+
+5. Verifique se os contêineres estão rodando:
 
 ```bash
 docker ps
 ```
 
-5. Acesse os endpoints da aplicação Flask em:
+6. Acesse os endpoints da aplicação Flask em:
 
 ```
 http://localhost:5000
@@ -89,3 +95,4 @@ http://localhost:5000
 - Todos os dados são armazenados no banco MySQL definido no `docker-compose.yaml`.
 - Certifique-se de que as portas no Docker Compose não estão sendo usadas por outros serviços.
 - O projeto foi testado utilizando Docker Desktop e rodando os contêineres via `docker-compose.yaml`.
+- Se rodando o Flask localmente, use `localhost` em vez de `mysql` na `SQLALCHEMY_DATABASE_URI`.
