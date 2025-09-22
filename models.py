@@ -1,6 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 
-db = SQLAlchemy()
+db = SQLAlchemy() # Conexão do Flask com o Banco de Dados
 
 class City(db.Model):
     __tablename__ = 'cities'

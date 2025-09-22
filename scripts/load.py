@@ -9,6 +9,8 @@ def load_weather_data(processed_data):
     """
     Função para carregar os dados no banco de dados MySQL.
     """
+
+    # Desempacotamento da tupla
     cities_df, weather_df = processed_data
 
     try:

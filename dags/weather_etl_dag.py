@@ -12,7 +12,7 @@ from scripts.load import load_weather_data
 # Lista de cidades para o pipeline
 cities = ["São Paulo", "Rio de Janeiro", "Curitiba"]
 
-# Defina o DAG
+# Define o DAG
 @dag(
     dag_id="weather_etl_dag",
     start_date=datetime(2025, 9, 18),

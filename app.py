@@ -11,9 +11,10 @@ app.config.from_object(Config)
 db.init_app(app)
 migrate = Migrate(app, db)
 
+# Função para manter os acentos nos endpoints
 def json_response(data, status=200):
     return Response(
-        json.dumps(data, ensure_ascii=False), # Para manter acentos
+        json.dumps(data, ensure_ascii=False),
         mimetype='application/json; charset=utf-8',
         status=status
     )
