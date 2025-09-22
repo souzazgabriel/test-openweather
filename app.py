@@ -2,7 +2,7 @@ from flask import Flask, jsonify
 from flask_migrate import Migrate
 from models import db, City, WeatherData,DailySummary
 from etl import fetch_weather_data, process_weather_data, load_weather_data,generate_daily_summary
-from config import Config
+from scripts.config import Config
 
 # Criação do app e configuração
 app = Flask(__name__)

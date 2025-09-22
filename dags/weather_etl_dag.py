@@ -1,11 +1,11 @@
-import sys
-import os
+import sys, os
 
 # Adiciona o caminho absoluto da pasta 'scripts' ao PYTHONPATH
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '.', 'scripts')))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from airflow import DAG
-from airflow.operators.python import PythonOperator
+from airflow.decorators import dag, task
+from airflow.providers.standard.operators.python import PythonOperator
 from datetime import datetime
 from scripts.extract import fetch_weather_data
 from scripts.process import process_weather_data
@@ -15,48 +15,28 @@ from scripts.load import load_weather_data
 cities = ["São Paulo", "Rio de Janeiro", "Curitiba"]
 
 # Defina o DAG
-with DAG(
-    dag_id='weather_etl_dag',
-    default_args={
-        'owner': 'airflow',
-        'retries': 1,
-    },
-    description='ETL de dados meteorológicos',
-    schedule_interval='0 9 * * *',  # Executa diariamente às 9h
-    start_date=datetime(2024, 12, 1),
+@dag(
+    dag_id="weather_etl_dag",
+    start_date=datetime(2025, 9, 18),
+    schedule="0 9 * * *",
     catchup=False,
-) as dag:
+)
+def weather_etl():
+    @task
+    def extract(city):
+        return fetch_weather_data(city)
 
-    # Dicionário para armazenar as tarefas de cada cidade
-    tasks = {}
+    @task
+    def process(raw_data):
+        return process_weather_data(raw_data)
+
+    @task
+    def load(data):
+        return load_weather_data(data)
 
     for city in cities:
-        # Tarefa de extração
-        extract_task = PythonOperator(
-            task_id=f'extract_weather_data_{city.replace(" ", "_").lower()}',
-            python_callable=fetch_weather_data,
-            op_args=[city],  # Passa a cidade como argumento
-        )
+        raw = extract(city)
+        processed = process(raw)
+        load(processed)
 
-        # Tarefa de processamento
-        process_task = PythonOperator(
-            task_id=f'process_weather_data_{city.replace(" ", "_").lower()}',
-            python_callable=process_weather_data,
-        )
-
-        # Tarefa de carga
-        load_task = PythonOperator(
-            task_id=f'load_weather_data_{city.replace(" ", "_").lower()}',
-            python_callable=load_weather_data,
-        )
-
-        # Definindo a ordem das tarefas
-        extract_task >> process_task >> load_task
-
-        # Salvando tarefas no dicionário
-        tasks[city] = {
-            'extract': extract_task,
-            'process': process_task,
-            'load': load_task,
-        }
-
+weather_etl()

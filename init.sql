@@ -40,7 +40,6 @@ USE weather_db;
   CONSTRAINT `daily_summary_ibfk_1` FOREIGN KEY (`city_id`) REFERENCES `cities` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-
 SET SQL_SAFE_UPDATES  = 0;
 ALTER TABLE cities AUTO_INCREMENT = 1;
 ALTER TABLE weather_data AUTO_INCREMENT = 1;

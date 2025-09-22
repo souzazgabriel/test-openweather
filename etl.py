@@ -2,7 +2,7 @@ import requests
 from datetime import datetime
 from models import City, WeatherData, db,DailySummary
 from sqlalchemy.sql import func
-from config import Config
+from scripts.config import Config
 
 def fetch_weather_data(city_name):
     """Extrai dados da API do OpenWeatherMap, incluindo novos campos.""" 
